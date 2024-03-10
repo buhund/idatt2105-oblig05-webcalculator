@@ -1,0 +1,14 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = git@github.com:buhund/idatt2105-oblig05.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[user]
+	name = Ivar Eirikson
+	email = 8539609+buhund@users.noreply.github.com
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
