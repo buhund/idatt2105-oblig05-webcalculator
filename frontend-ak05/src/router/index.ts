@@ -1,7 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import {useAuth} from "@/composables/useAuth";
+
 
 
 const router = createRouter({
+
+
+
+
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -27,5 +33,14 @@ const router = createRouter({
     // Add other routes here
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const { isAuthenticated } = useAuth();
+  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated.value) {
+    next({ name: 'Login' }); // Adjust according to your route name
+  } else {
+    next();
+  }
+});
 
 export default router

@@ -4,80 +4,40 @@ import axios from 'axios';
 import { useFormStore } from '@/stores/formStore';
 import { onMounted } from 'vue';
 
-const store = useFormStore();
-const submissionMessage = ref('');
-const nameError = ref("");
-const emailError = ref("");
-const messageError = ref("");
-const terms = ref(true); // Assuming terms are pre-accepted and not managed by the store
 
-// Email validation regex
+const username = ref("");
+const password = ref("");
+const loginError = ref("");
+const terms = ref(true);
+
 const emailRegex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[?)[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}]?|(([\w-]+\.)+[a-zA-Z]{2,}))$/);
 
-// Load and save form data from/to localStorage
-onMounted(() => {
-  store.loadForm();
-});
-
-// Watch store properties to save form data changes
-watch(() => [store.name, store.email, store.message], () => {
-  store.saveForm();
-}, { deep: true });
-
-function validateForm() {
-  let isValid = true;
-  nameError.value = '';
-  emailError.value = '';
-  messageError.value = '';
-  submissionMessage.value = '';
-
-
-  if (store.name.length < 2) {
-    nameError.value = 'Name must be at least 2 characters long.';
-    isValid = false;
-  }
-  if (!emailRegex.test(store.email)) {
-    emailError.value = 'Email must be valid.';
-    isValid = false;
-  }
-  if (store.message.length < 10) {
-    messageError.value = 'Message must be at least 10 characters long.';
-    isValid = false;
-  }
-
-  return isValid;
-}
-
-async function submitCreateAccount() {
-  if (!validateForm()) {
-    return;
-  }
-
+async function login() {
   try {
-    await axios.post('http://localhost:3000/submissions', {
-      name: store.name,
-      email: store.email,
-      message: store.message,
+    const response = await axios.post('http://localhost:8080/api/login', {
+      username: username.value,
+      password: password.value,
     });
-    submissionMessage.value = 'Message submitted successfully!'; // Confirm this line exists
-    store.clearForm();
+    // Handle successful login here, e.g., storing the session or JWT token if used
+    console.log(response.data);
   } catch (error) {
-    submissionMessage.value = 'Failed to submit message.';
+    loginError.value = 'Failed to log in. Please check your credentials.';
+    console.error('Login error:', error);
   }
 }
+
 </script>
 
 
 
 <template>
-  <form class="login-form" @submit.prevent="submitCreateAccount" novalidate>
-    <label>Name:</label>
-    <input v-model="store.name" type="text" data-testid="nameField" required>
-    <div v-if="nameError" class="error-message" data-testid="nameErrorLabel">{{ nameError }}</div>
+  <form class="login-form" @submit.prevent="login" novalidate>
+    <label>User name:</label>
+    <input v-model="username" type="text" required>
 
-    <label>Email:</label>
-    <input v-model="store.email" type="email" data-testid="emailField" required>
-    <div v-if="emailError" class="error-message" data-testid="emailErrorLabel">{{ emailError }}</div>
+    <label>Password</label>
+    <input v-model="password" type="password" required>
+    <div v-if="loginError" class="error-message">{{ loginError }}</div>
 
     <div class="terms">
       <input type="checkbox" v-model="terms" disabled>
@@ -85,8 +45,7 @@ async function submitCreateAccount() {
     </div>
 
     <div class="submit">
-      <button type="submit" class="button" data-testid="submitButton">Log in</button>
-      <div v-if="submissionMessage" class="submission-message" data-testid="submitMessage">{{ submissionMessage }}</div>
+      <button type="submit" class="button">Log in</button>
     </div>
   </form>
 </template>

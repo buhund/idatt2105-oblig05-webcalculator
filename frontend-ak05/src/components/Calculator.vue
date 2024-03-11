@@ -137,7 +137,7 @@ function clearHistory() {
     <div class="calculator">
 
       <div class="history_buttons">
-        <div @click="toggleHistory" class="history_button">SFH View</div>
+        <div @click="toggleHistory" class="history_button">Show History</div>
         <div @click="clearHistory" class="history_button clear_history_button">Clear History</div>
       </div>
 
@@ -209,6 +209,8 @@ function clearHistory() {
   background-color: #f8f8f8;
   opacity: 80%;
   border: 2px solid #282828;
+  color: black;
+  text-align: right;
 }
 
 .history {

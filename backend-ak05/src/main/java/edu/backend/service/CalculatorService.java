@@ -1,5 +1,6 @@
 package edu.backend.service;
 
+import edu.backend.repository.CalculationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,9 @@ import javax.script.ScriptException;
 
 @Service
 public class CalculatorService {
+
+  private final CalculationRepository calculationRepository;
+  private final UserService userService;
   private static final Logger logger = LoggerFactory.getLogger(CalculatorService.class);
   private ScriptEngine engine;
 
@@ -19,8 +23,10 @@ public class CalculatorService {
    * the `@Service´ class annotation, and Java will provide a default no-argument
    * constructor for Spring.
    */
-  public CalculatorService() {
+  public CalculatorService(CalculationRepository calculationRepository, UserService userService) {
 
+    this.calculationRepository = calculationRepository;
+    this.userService = userService;
   }
 
   private ScriptEngine getEngine() {

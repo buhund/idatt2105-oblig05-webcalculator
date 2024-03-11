@@ -33,9 +33,11 @@ const { toggleTheme } = useTheme();
     <div></div>
   </div>
 
+
   <div id="app">
     <button @click="toggleTheme" class="theme-toggle">Toggle Theme</button>
   </div>
+
 
 
 </template>
