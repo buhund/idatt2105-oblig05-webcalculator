@@ -22,12 +22,6 @@ public class CalculatorController {
   @Autowired
   private CalculatorService calculatorService;
 
-    @Autowired
-  public CalculatorController(CalculatorService calculatorService) {
-    this.calculatorService = calculatorService;
-  }
-
-
   /**
    * Creates a CalculationRequest object.
    * The calculationResult object from calculatorService is "put inside" this object
