@@ -93,6 +93,7 @@ nav {
   text-align: center;
   margin-top: 2rem;
   padding: 10px;
+  background-color: palevioletred;
 }
 
 nav a.router-link-exact-active {
