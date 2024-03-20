@@ -1,4 +1,4 @@
-package edu.backend.controller;
+package edu.backend.model;
 
 
 public class AuthRequest {
