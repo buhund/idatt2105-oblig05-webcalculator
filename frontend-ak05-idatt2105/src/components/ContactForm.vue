@@ -1,4 +1,6 @@
 <script setup lang="ts">
+// src/components/ContactForm.vue
+
 import { ref, watch } from 'vue';
 import axios from 'axios';
 import { useFormStore } from '@/stores/formStore';

@@ -1,9 +1,9 @@
 package edu.backend.controller;
 
+import edu.backend.model.AppUser;
 import edu.backend.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
-import edu.backend.model.User;
 import edu.backend.model.Calculation;
 import edu.backend.repository.CalculationRepository;
 
@@ -22,19 +22,19 @@ public class UserController {
   }
 
   @PostMapping
-  public User createUser(@RequestBody User user) {
-    return userRepository.save(user);
+  public AppUser createUser(@RequestBody AppUser appUser) {
+    return userRepository.save(appUser);
   }
 
   @PostMapping("/{id}/calculations")
   public Calculation createCalculation(@PathVariable Long id, @RequestBody Calculation calculation) {
-    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-    calculation.setUser(user);
+    AppUser appUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("AppUser not found"));
+    calculation.setUser(appUser);
     return calculationRepository.save(calculation);
   }
 
   @GetMapping("/{id}/calculations")
   public List<Calculation> getCalculations(@PathVariable Long id) {
-    return calculationRepository.findByUserId(id);
+    return calculationRepository.findByAppUserId(id);
   }
 }

@@ -1,54 +1,75 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import axios from 'axios';
-import { useFormStore } from '@/stores/formStore';
-import { onMounted } from 'vue';
+// src/components/RegistrationForm.vue
 
+import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const username = ref("");
 const password = ref("");
-const loginError = ref("");
+const registrationError = ref("");
 const terms = ref(true);
+const router = useRouter();
 
-const emailRegex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[?)[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}]?|(([\w-]+\.)+[a-zA-Z]{2,}))$/);
+async function register() {
+  if (!terms.value) {
+    registrationError.value = 'You must accept the terms and conditions to register.';
+    return;
+  }
 
-async function login() {
+  const userData = {
+    username: username.value,
+    password: password.value,
+  };
+
   try {
-    const response = await axios.post('http://localhost:8080/api/login', {
-      username: username.value,
-      password: password.value,
+    const response = await axios.post('http://localhost:8080/api/auth/register', userData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-    // Handle successful login here, e.g., storing the session or JWT token if used
-    console.log(response.data);
+    // alert("Registration successful");
+    // await router.push('/login');
+    console.log("Registration successful", response.data.message);
+    console.log("Registering:", userData);
+    await router.push({ name: 'login' });
   } catch (error) {
-    loginError.value = 'Failed to log in. Please check your credentials.';
-    console.error('Login error:', error);
+    // Check if error is an AxiosError
+    if (axios.isAxiosError(error)) {
+      // TypeScript now know if this is an AxiosError, so it can access error.response safely
+      const message = error.response?.data?.message || 'Failed to register.';
+      registrationError.value = message;
+    } else {
+      // If not an AxiosError, handle it as a generic error
+      console.error('An unexpected error occurred:', error);
+      registrationError.value = 'An unexpected error occurred.';
+    }
   }
 }
-
 </script>
 
-
-
 <template>
-  <form class="login-form" @submit.prevent="login" novalidate>
+  <form class="registration-form" @submit.prevent="register" novalidate>
+    <h2>Register</h2>
     <label>User name:</label>
     <input v-model="username" type="text" required>
 
-    <label>Password</label>
+    <label>Password:</label>
     <input v-model="password" type="password" required>
-    <div v-if="loginError" class="error-message">{{ loginError }}</div>
 
     <div class="terms">
       <input type="checkbox" v-model="terms" disabled>
       <label>Accept terms and conditions</label>
     </div>
 
+    <div v-if="registrationError" class="error-message">{{ registrationError }}</div>
+
     <div class="submit">
-      <button type="submit" class="button">Log in</button>
+      <button type="submit" class="button">Register User</button>
     </div>
   </form>
 </template>
+
 
 <style scoped>
 
@@ -72,7 +93,7 @@ input[type="checkbox"] {
 }
 
 
-.login-form {
+.registration-form {
   width: 100%;
   max-height: 90vh;
   min-height: 30vh;

@@ -1,7 +1,6 @@
 package edu.backend.model;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 public class Calculation {
@@ -14,9 +13,7 @@ public class Calculation {
 
   @ManyToOne
   @JoinColumn(name = "user_id")
-  private User user;
-
-  // getters and setters
+  private AppUser appUser;
 
   public Long getId() {
     return id;
@@ -42,11 +39,11 @@ public class Calculation {
     this.result = result;
   }
 
-  public User getUser() {
-    return user;
+  public AppUser getUser() {
+    return appUser;
   }
 
-  public void setUser(User user) {
-    this.user = user;
+  public void setUser(AppUser appUser) {
+    this.appUser = appUser;
   }
 }

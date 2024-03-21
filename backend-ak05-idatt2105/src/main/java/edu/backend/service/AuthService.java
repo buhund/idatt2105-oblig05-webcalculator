@@ -1,6 +1,6 @@
 package edu.backend.service;
 
-import edu.backend.model.User;
+import edu.backend.model.AppUser;
 import edu.backend.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,17 +16,17 @@ public class AuthService {
   }
 
   public void authenticate(String username, String password) throws Exception {
-    User user = userRepository.findByUsername(username);
-    if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+    AppUser appUser = userRepository.findByUsername(username);
+    if (appUser == null || !passwordEncoder.matches(password, appUser.getPassword())) {
       throw new Exception("Invalid username/password");
     }
   }
 
-  public User registerUser(User newUser) throws Exception {
-    if(userRepository.existsByUsername(newUser.getUsername())) {
+  public AppUser registerUser(AppUser newAppUser) throws Exception {
+    if(userRepository.existsByUsername(newAppUser.getUsername())) {
       throw new Exception("Username already taken");
     }
-    newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-    return userRepository.save(newUser);
+    newAppUser.setPassword(passwordEncoder.encode(newAppUser.getPassword()));
+    return userRepository.save(newAppUser);
   }
 }

@@ -1,8 +1,15 @@
+<!-- src/App.vue -->
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { useTheme } from '@/composables/useTheme';
-const { toggleTheme } = useTheme();
+import { useAuth } from '@/composables/useAuth';
 
+const { toggleTheme } = useTheme();
+const { isLoggedIn, username, logout } = useAuth();
+
+const performLogout = () => {
+  logout();
+}
 
 </script>
 
@@ -13,36 +20,47 @@ const { toggleTheme } = useTheme();
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/calculator">Calculator</RouterLink>
       <RouterLink to="/contact">Contact</RouterLink>
-      <RouterLink to="/login" class="login">Log In</RouterLink>
+      <RouterLink v-if="!isLoggedIn" to="/login" class="login">Log In</RouterLink>
+      <div v-if="isLoggedIn" class="user-info">
+        <span>{{ username }}</span>
+        <button class="logout-button" @click="performLogout">Log out</button>
+      </div>
     </nav>
+    <RouterView />
   </div>
 
-<!--  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="./assets/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>-->
 
-
-  <div id="app">
+<!--  <div id="app">
     <div></div>
     <div><RouterView /></div>
     <div></div>
-  </div>
+  </div>-->
 
 
-  <div id="app">
+<!--  <div id="app">
     <button @click="toggleTheme" class="theme-toggle">Toggle Theme</button>
-  </div>
+  </div>-->
 
 
 
 </template>
 
 <style scoped>
+.user-info {
+  display: inline-block;
+  margin-left: auto;
+}
+
+.logout-button {
+    border: 0;
+    padding: 10px 20px;
+    margin-left: 40px;
+    color: white;
+    border-radius: 20px;
+    background-color: rgba(50,176,214,0.68);
+}
+
+
 .logo {
   height: 6em;
   padding: 1.5em;

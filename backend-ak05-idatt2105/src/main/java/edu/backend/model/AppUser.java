@@ -4,16 +4,15 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class User {
+@Table(name = "app_users")
+public class AppUser {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   private String username;
   private String password;
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
   private List<Calculation> calculations;
-
-  // getters and setters
 
   public Long getId() {
     return id;

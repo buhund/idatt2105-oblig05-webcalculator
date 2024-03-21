@@ -1,48 +1,49 @@
+<!-- src/components/LoginForm.vue -->
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
-import { useFormStore } from '@/stores/formStore';
-import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuth } from '@/composables/useAuth';
 
+const username = ref('');
+const password = ref('');
+const loginError = ref('');
 
-const username = ref("");
-const password = ref("");
-const loginError = ref("");
-const terms = ref(true);
+const { login } = useAuth();
+const router = useRouter();
 
-const emailRegex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[?)[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}]?|(([\w-]+\.)+[a-zA-Z]{2,}))$/);
-
-async function login() {
+const performLogin = async () => {
   try {
-    const response = await axios.post('http://localhost:8080/api/login', {
+    const response = await axios.post('http://localhost:8080/api/auth/authenticate', {
       username: username.value,
       password: password.value,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-    // Handle successful login here, e.g., storing the session or JWT token if used
-    console.log(response.data);
+
+    login(response.data.token, username.value);
+    // Redirect to the homepage or another page as needed
+    await router.push('/');
   } catch (error) {
     loginError.value = 'Failed to log in. Please check your credentials.';
     console.error('Login error:', error);
   }
-}
-
+};
 </script>
 
 
 
 <template>
-  <form class="login-form" @submit.prevent="login" novalidate>
+  <form class="login-form" @submit.prevent="performLogin" novalidate>
+    <h2>Log In</h2>
     <label>User name:</label>
     <input v-model="username" type="text" required>
 
-    <label>Password</label>
+    <label>Password:</label>
     <input v-model="password" type="password" required>
     <div v-if="loginError" class="error-message">{{ loginError }}</div>
-
-    <div class="terms">
-      <input type="checkbox" v-model="terms" disabled>
-      <label>Accept terms and conditions</label>
-    </div>
 
     <div class="submit">
       <button type="submit" class="button">Log in</button>

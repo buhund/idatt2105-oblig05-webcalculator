@@ -1,4 +1,6 @@
 <script setup lang="ts">
+// src/components/Calculator.vue
+
 import { ref } from 'vue';
 import * as math from 'mathjs';
 import { calculateResult } from '@/api'; // Adjust the import path based on where you placed your API service
@@ -81,7 +83,7 @@ function addition() {
 }
 
 /**
- * Checks if formula is is valid, i.e. not empty.
+ * Checks if formula is valid, i.e. not empty.
  * Calls api.ts/calculateResult, passing formula as an argument.
  *
  * calculateResult passes the formula as an object to the backend.
@@ -297,7 +299,7 @@ function clearHistory() {
   transition: transform 0.2s, margin 0.2s, border 0.2s;
   margin: 4px;
   border: 1px solid #282828;
-  user-select: none;
+  appUser-select: none;
   cursor: pointer;;
 }
 
@@ -305,7 +307,7 @@ function clearHistory() {
   transform: scale(1.05);
   margin: 1px;
   border: 2px solid red;
-  user-select: none;
+  appUser-select: none;
 }
 
 

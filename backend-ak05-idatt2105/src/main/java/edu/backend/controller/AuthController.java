@@ -1,15 +1,17 @@
 package edu.backend.controller;
 
-import edu.backend.model.User;
+import edu.backend.model.AppUser;
 import edu.backend.service.AuthService;
 import edu.backend.utility.JWTUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/auth") // Base URL for all operations in this controller
 public class AuthController {
   private JWTUtil jwtUtil;
   private AuthService authService;
@@ -20,7 +22,7 @@ public class AuthController {
   }
 
   @PostMapping("/authenticate")
-  public ResponseEntity<?> generateToken(@RequestBody User authRequest) {
+  public ResponseEntity<?> generateToken(@RequestBody AppUser authRequest) {
     try {
       authService.authenticate(authRequest.getUsername(), authRequest.getPassword());
       String token = jwtUtil.generateToken(authRequest.getUsername());
@@ -31,10 +33,10 @@ public class AuthController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<?> registerUser(@RequestBody User newUser) {
+  public ResponseEntity<?> registerUser(@RequestBody AppUser newAppUser) {
     try {
-      User user = authService.registerUser(newUser);
-      return ResponseEntity.ok(new ApiResponse("User registered successfully", true));
+      AppUser appUser = authService.registerUser(newAppUser);
+      return ResponseEntity.ok(new ApiResponse("AppUser registered successfully", true));
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), false));
     }
