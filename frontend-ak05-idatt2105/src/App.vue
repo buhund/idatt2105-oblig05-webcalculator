@@ -15,26 +15,27 @@ const performLogout = () => {
 
 <template>
 
+
   <div class="wrapper">
+
     <nav>
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/calculator">Calculator</RouterLink>
       <RouterLink to="/contact">Contact</RouterLink>
       <RouterLink v-if="!isLoggedIn" to="/login" class="login">Log In</RouterLink>
-      <div v-if="isLoggedIn" class="user-info">
+      <div v-if="isLoggedIn" class="user-info">Welcome,
         <span>{{ username }}</span>
         <button class="logout-button" @click="performLogout">Log out</button>
       </div>
     </nav>
-    <RouterView />
   </div>
 
 
-<!--  <div id="app">
+  <div id="app">
     <div></div>
     <div><RouterView /></div>
     <div></div>
-  </div>-->
+  </div>-
 
 
 <!--  <div id="app">
@@ -47,14 +48,14 @@ const performLogout = () => {
 
 <style scoped>
 .user-info {
-  display: inline-block;
+  display: flex-end;
   margin-left: auto;
 }
 
 .logout-button {
     border: 0;
     padding: 10px 20px;
-    margin-left: 40px;
+    margin-left: 14px;
     color: white;
     border-radius: 20px;
     background-color: rgba(50,176,214,0.68);
@@ -111,7 +112,7 @@ nav {
   text-align: center;
   margin-top: 2rem;
   padding: 10px;
-  background-color: palevioletred;
+  background-color: rgba(219, 112, 147, 0.8);
 }
 
 nav a.router-link-exact-active {
