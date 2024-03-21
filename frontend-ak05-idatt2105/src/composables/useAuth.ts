@@ -2,7 +2,7 @@
 import { ref, readonly } from 'vue';
 
 const token = ref(localStorage.getItem('userToken'));
-const username = ref(localStorage.getItem('username')); // Store the username
+const username = ref(localStorage.getItem('username'));
 const isLoggedIn = ref(!!token.value);
 
 export function useAuth() {
@@ -11,7 +11,7 @@ export function useAuth() {
     username.value = usernameValue;
     isLoggedIn.value = true;
     localStorage.setItem('userToken', tokenValue);
-    localStorage.setItem('username', usernameValue); // Save the username
+    localStorage.setItem('username', usernameValue);
   };
 
   const logout = () => {
@@ -24,7 +24,7 @@ export function useAuth() {
 
   return {
     isLoggedIn: readonly(isLoggedIn),
-    username: readonly(username), // Expose the username
+    username: readonly(username), // Exposing username so that it can be shown on the website
     login,
     logout,
   };

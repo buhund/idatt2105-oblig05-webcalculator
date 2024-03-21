@@ -1,7 +1,6 @@
 // src/api.ts
 import axios from 'axios';
 
-// Adjust the port accordingly to backend port
 const API_BASE_URL = 'http://localhost:8080/api/calculator';
 
 /**
