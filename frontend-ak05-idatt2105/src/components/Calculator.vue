@@ -1,9 +1,10 @@
+<!-- src/components/Calculator.vue -->
 <script setup lang="ts">
-// src/components/Calculator.vue
-
 import { ref } from 'vue';
 import * as math from 'mathjs';
-import { calculateResult } from '@/api'; // Adjust the import path based on where you placed your API service
+import { calculateResult } from '@/api';
+import { saveCalculation, fetchCalculations } from '@/api';
+import { onMounted } from 'vue';
 
 
 const current = ref('');
@@ -13,6 +14,8 @@ const operatorClicked = ref(false);
 const formula = ref('');
 const historyOfOperations = ref<Array<{ formula: string; result: string }>>([]);
 const showHistory = ref(false);
+const currentPage = ref(1);
+const totalPages = ref(0);
 
 function clear() {
   current.value = '';
@@ -93,7 +96,7 @@ function addition() {
  *
  * Equals pushes the returned result/answer to the display.
  */
-async function equals() {
+async function equals123() {
   if (formula.value.trim()) {
     try {
       const result = await calculateResult(formula.value);
@@ -108,6 +111,45 @@ async function equals() {
   }
 }
 
+async function equals() {
+  if (formula.value.trim()) {
+    try {
+      // Perform the calculation on the frontend
+      const result = math.evaluate(formula.value).toString(); // Using math.js for simplicity
+      current.value = result;
+
+      // Save the calculation to the logged-in user
+      await saveCalculation({
+        formula: formula.value,
+        result,
+      });
+
+      // Refresh the history of operations
+      await refreshHistory(currentPage.value);
+    } catch (error) {
+      console.error('Error:', error);
+      current.value = 'Error';
+    }
+  }
+}
+
+// Function to refresh the history of calculations
+async function refreshHistory(page = 1) {
+  try {
+    const response = await fetchCalculations(page - 1); // Assuming your backend uses 0-based page indexing
+    historyOfOperations.value = response.data.content;
+    totalPages.value = response.data.totalPages;
+    currentPage.value = response.data.number + 1;
+  } catch (error) {
+    console.error('Error fetching calculations:', error);
+  }
+}
+
+
+
+onMounted(() => {
+  refreshHistory(); // Calls the function to load the initial history
+});
 
 function backspace() {
   current.value = current.value.slice(0, -1);

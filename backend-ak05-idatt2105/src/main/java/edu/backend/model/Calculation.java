@@ -8,12 +8,14 @@ public class Calculation {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  private String expression;
+  private String formula;
   private String result;
 
   @ManyToOne
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "app_user_id")
   private AppUser appUser;
+
+  // Getters and Setters
 
   public Long getId() {
     return id;
@@ -23,12 +25,12 @@ public class Calculation {
     this.id = id;
   }
 
-  public String getExpression() {
-    return expression;
+  public String getFormula() {
+    return formula;
   }
 
-  public void setExpression(String expression) {
-    this.expression = expression;
+  public void setFormula(String formula) {
+    this.formula = formula;
   }
 
   public String getResult() {
@@ -39,11 +41,11 @@ public class Calculation {
     this.result = result;
   }
 
-  public AppUser getUser() {
+  public AppUser getAppUser() {
     return appUser;
   }
 
-  public void setUser(AppUser appUser) {
+  public void setAppUser(AppUser appUser) {
     this.appUser = appUser;
   }
 }

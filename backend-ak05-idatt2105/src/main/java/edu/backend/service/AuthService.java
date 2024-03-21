@@ -16,8 +16,9 @@ public class AuthService {
   }
 
   public void authenticate(String username, String password) throws Exception {
-    AppUser appUser = userRepository.findByUsername(username);
-    if (appUser == null || !passwordEncoder.matches(password, appUser.getPassword())) {
+    AppUser appUser = userRepository.findByUsername(username)
+        .orElseThrow(() -> new Exception("Invalid username/password"));
+    if (!passwordEncoder.matches(password, appUser.getPassword())) {
       throw new Exception("Invalid username/password");
     }
   }

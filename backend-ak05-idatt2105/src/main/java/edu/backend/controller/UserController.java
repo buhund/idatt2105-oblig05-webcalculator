@@ -29,9 +29,10 @@ public class UserController {
   @PostMapping("/{id}/calculations")
   public Calculation createCalculation(@PathVariable Long id, @RequestBody Calculation calculation) {
     AppUser appUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("AppUser not found"));
-    calculation.setUser(appUser);
+    calculation.setAppUser(appUser); // Use the appUser object obtained from the repository
     return calculationRepository.save(calculation);
   }
+
 
   @GetMapping("/{id}/calculations")
   public List<Calculation> getCalculations(@PathVariable Long id) {

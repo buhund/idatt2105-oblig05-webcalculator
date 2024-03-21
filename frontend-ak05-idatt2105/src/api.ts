@@ -1,7 +1,7 @@
 // src/api.ts
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api/calculator';
+const API_BASE_URL = 'http://localhost:8080/api';
 
 /**
  * Gets formula from Calculator.vue/equals function.
@@ -28,3 +28,17 @@ export const calculateResult = async (formula: string) => {
   }
 };
 
+
+export const saveCalculation = async (calculation) => {
+  const token = localStorage.getItem('userToken');
+  return axios.post(`${API_BASE_URL}/calculations`, calculation, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+export const fetchCalculations = async (page) => {
+  const token = localStorage.getItem('userToken');
+  return axios.get(`${API_BASE_URL}/calculations?page=${page}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
